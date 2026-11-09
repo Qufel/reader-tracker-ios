@@ -1,0 +1,546 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 110;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		A169730830A23C8800C7D86C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A16972F030A23C8700C7D86C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A16972F730A23C8700C7D86C;
+			remoteInfo = ReaderTracker;
+		};
+		A169731230A23C8800C7D86C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A16972F030A23C8700C7D86C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A16972F730A23C8700C7D86C;
+			remoteInfo = ReaderTracker;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A16972F830A23C8700C7D86C /* ReaderTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReaderTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A169730730A23C8800C7D86C /* ReaderTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReaderTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A169731130A23C8800C7D86C /* ReaderTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReaderTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A16972FA30A23C8700C7D86C /* ReaderTracker */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ReaderTracker;
+			sourceTree = "<group>";
+		};
+		A169730A30A23C8800C7D86C /* ReaderTrackerTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ReaderTrackerTests;
+			sourceTree = "<group>";
+		};
+		A169731430A23C8800C7D86C /* ReaderTrackerUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ReaderTrackerUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A16972F530A23C8700C7D86C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		A169730430A23C8800C7D86C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		A169730E30A23C8800C7D86C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A16972EF30A23C8700C7D86C = {
+			isa = PBXGroup;
+			children = (
+				A16972FA30A23C8700C7D86C /* ReaderTracker */,
+				A169730A30A23C8800C7D86C /* ReaderTrackerTests */,
+				A169731430A23C8800C7D86C /* ReaderTrackerUITests */,
+				A16972F930A23C8700C7D86C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A16972F930A23C8700C7D86C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A16972F830A23C8700C7D86C /* ReaderTracker.app */,
+				A169730730A23C8800C7D86C /* ReaderTrackerTests.xctest */,
+				A169731130A23C8800C7D86C /* ReaderTrackerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A16972F730A23C8700C7D86C /* ReaderTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A169731930A23C8800C7D86C /* Build configuration list for PBXNativeTarget "ReaderTracker" */;
+			buildPhases = (
+				A16972F430A23C8700C7D86C /* Sources */,
+				A16972F530A23C8700C7D86C /* Frameworks */,
+				A16972F630A23C8700C7D86C /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				A16972FA30A23C8700C7D86C /* ReaderTracker */,
+			);
+			name = ReaderTracker;
+			productName = ReaderTracker;
+			productReference = A16972F830A23C8700C7D86C /* ReaderTracker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A169730630A23C8800C7D86C /* ReaderTrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A169731C30A23C8800C7D86C /* Build configuration list for PBXNativeTarget "ReaderTrackerTests" */;
+			buildPhases = (
+				A169730330A23C8800C7D86C /* Sources */,
+				A169730430A23C8800C7D86C /* Frameworks */,
+				A169730530A23C8800C7D86C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A169730930A23C8800C7D86C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A169730A30A23C8800C7D86C /* ReaderTrackerTests */,
+			);
+			name = ReaderTrackerTests;
+			productName = ReaderTrackerTests;
+			productReference = A169730730A23C8800C7D86C /* ReaderTrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A169731030A23C8800C7D86C /* ReaderTrackerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A169731F30A23C8800C7D86C /* Build configuration list for PBXNativeTarget "ReaderTrackerUITests" */;
+			buildPhases = (
+				A169730D30A23C8800C7D86C /* Sources */,
+				A169730E30A23C8800C7D86C /* Frameworks */,
+				A169730F30A23C8800C7D86C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A169731330A23C8800C7D86C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A169731430A23C8800C7D86C /* ReaderTrackerUITests */,
+			);
+			name = ReaderTrackerUITests;
+			productName = ReaderTrackerUITests;
+			productReference = A169731130A23C8800C7D86C /* ReaderTrackerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A16972F030A23C8700C7D86C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					A16972F730A23C8700C7D86C = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					A169730630A23C8800C7D86C = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = A16972F730A23C8700C7D86C;
+					};
+					A169731030A23C8800C7D86C = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = A16972F730A23C8700C7D86C;
+					};
+				};
+			};
+			buildConfigurationList = A16972F330A23C8700C7D86C /* Build configuration list for PBXProject "ReaderTracker" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A16972EF30A23C8700C7D86C;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A16972F930A23C8700C7D86C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A16972F730A23C8700C7D86C /* ReaderTracker */,
+				A169730630A23C8800C7D86C /* ReaderTrackerTests */,
+				A169731030A23C8800C7D86C /* ReaderTrackerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A16972F630A23C8700C7D86C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		A169730530A23C8800C7D86C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		A169730F30A23C8800C7D86C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A16972F430A23C8700C7D86C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		A169730330A23C8800C7D86C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		A169730D30A23C8800C7D86C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A169730930A23C8800C7D86C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A16972F730A23C8700C7D86C /* ReaderTracker */;
+			targetProxy = A169730830A23C8800C7D86C /* PBXContainerItemProxy */;
+		};
+		A169731330A23C8800C7D86C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A16972F730A23C8700C7D86C /* ReaderTracker */;
+			targetProxy = A169731230A23C8800C7D86C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A169731730A23C8800C7D86C /* Debug configuration for PBXProject "ReaderTracker" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A169731830A23C8800C7D86C /* Release configuration for PBXProject "ReaderTracker" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A169731A30A23C8800C7D86C /* Debug configuration for PBXNativeTarget "ReaderTracker" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Jakub-Kuflik.ReaderTracker";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A169731B30A23C8800C7D86C /* Release configuration for PBXNativeTarget "ReaderTracker" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Jakub-Kuflik.ReaderTracker";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A169731D30A23C8800C7D86C /* Debug configuration for PBXNativeTarget "ReaderTrackerTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Jakub-Kuflik.ReaderTrackerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReaderTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ReaderTracker";
+			};
+			name = Debug;
+		};
+		A169731E30A23C8800C7D86C /* Release configuration for PBXNativeTarget "ReaderTrackerTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Jakub-Kuflik.ReaderTrackerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReaderTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ReaderTracker";
+			};
+			name = Release;
+		};
+		A169732030A23C8800C7D86C /* Debug configuration for PBXNativeTarget "ReaderTrackerUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Jakub-Kuflik.ReaderTrackerUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ReaderTracker;
+			};
+			name = Debug;
+		};
+		A169732130A23C8800C7D86C /* Release configuration for PBXNativeTarget "ReaderTrackerUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Jakub-Kuflik.ReaderTrackerUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ReaderTracker;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A16972F330A23C8700C7D86C /* Build configuration list for PBXProject "ReaderTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A169731730A23C8800C7D86C /* Debug configuration for PBXProject "ReaderTracker" */,
+				A169731830A23C8800C7D86C /* Release configuration for PBXProject "ReaderTracker" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A169731930A23C8800C7D86C /* Build configuration list for PBXNativeTarget "ReaderTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A169731A30A23C8800C7D86C /* Debug configuration for PBXNativeTarget "ReaderTracker" */,
+				A169731B30A23C8800C7D86C /* Release configuration for PBXNativeTarget "ReaderTracker" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A169731C30A23C8800C7D86C /* Build configuration list for PBXNativeTarget "ReaderTrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A169731D30A23C8800C7D86C /* Debug configuration for PBXNativeTarget "ReaderTrackerTests" */,
+				A169731E30A23C8800C7D86C /* Release configuration for PBXNativeTarget "ReaderTrackerTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A169731F30A23C8800C7D86C /* Build configuration list for PBXNativeTarget "ReaderTrackerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A169732030A23C8800C7D86C /* Debug configuration for PBXNativeTarget "ReaderTrackerUITests" */,
+				A169732130A23C8800C7D86C /* Release configuration for PBXNativeTarget "ReaderTrackerUITests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A16972F030A23C8700C7D86C /* Project object */;
+	validationLevel = 1;
+}
