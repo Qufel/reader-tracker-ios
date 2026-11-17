@@ -29,9 +29,33 @@
 		A169731130A23C8800C7D86C /* ReaderTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReaderTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A12EE33730ACD78600616E94 /* Exceptions for "ReaderTracker" folder in "ReaderTracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				PreviewData.swift,
+			);
+			target = A16972F730A23C8700C7D86C /* ReaderTracker */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		A12EE33830ACD78600616E94 /* Exceptions for "ReaderTracker" folder in "Copy Bundle Resources" phase from "ReaderTracker" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = A16972F630A23C8700C7D86C /* Resources */;
+			membershipExceptions = (
+				PreviewData.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A16972FA30A23C8700C7D86C /* ReaderTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A12EE33730ACD78600616E94 /* Exceptions for "ReaderTracker" folder in "ReaderTracker" target */,
+				A12EE33830ACD78600616E94 /* Exceptions for "ReaderTracker" folder in "Copy Bundle Resources" phase from "ReaderTracker" target */,
+			);
 			path = ReaderTracker;
 			sourceTree = "<group>";
 		};

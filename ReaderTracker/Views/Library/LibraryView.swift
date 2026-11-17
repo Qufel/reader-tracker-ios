@@ -8,11 +8,31 @@
 import SwiftUI
 
 struct LibraryView: View {
+    let vm: LibraryViewModel
+    
     var body: some View {
-        Text("Hello, Library!")
-    }
-}
+            NavigationStack {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Currently Reading")
+                        ForEach(vm.currentlyReading) { card in
+                            NavigationLink(value: card.id) {
+                                EntryCardView(state: card)
+                            }
+                            .buttonStyle(.plain)
+                        }
 
-#Preview {
-    LibraryView()
+                        Text("Shelves")
+                        ForEach(vm.shelves) { card in
+                            NavigationLink(value: card.id) {
+                                EntryCardView(state: card)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding()
+                }
+            }
+        }
+    
 }
