@@ -60,7 +60,7 @@ struct SearchView: View {
             .navigationTitle("Search")
             .searchable(text: $searchVM.query, prompt: "Titles or authors")
             .task(id: searchVM.query) {
-                try? await Task.sleep(for: .milliseconds(250))
+                try? await Task.sleep(for: .milliseconds(500))
                 await searchVM.search()
             }
             .navigationDestination(for: Title.self) { title in

@@ -156,6 +156,22 @@ struct ReaderTrackerTests {
         #expect(titles.first?.cover == .url(URL(string: "https://covers.openlibrary.org/b/id/123-L.jpg")!))
     }
 
+    @Test func openLibrarySearchCacheNormalizesQueries() async throws {
+        let temporaryDirectory = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let cache = OpenLibrarySearchCache(directory: temporaryDirectory)
+        let title = Title(
+            id: TitleID(source: .openLibrary, value: "cached"),
+            name: "Cached", author: "Author", format: .print,
+            total: 100, cover: .color(hex: "#000000"))
+
+        await cache.save(query: "  Dune  ", titles: [title])
+        let loaded = await cache.load(query: "dune")
+
+        #expect(loaded == [title])
+        try? FileManager.default.removeItem(at: temporaryDirectory)
+    }
+
     @Test func openLibrarySearchIgnoresBlankQuery() async throws {
         let provider = OpenLibrarySearchProvider()
         #expect(try await provider.search(query: "   ") == [])

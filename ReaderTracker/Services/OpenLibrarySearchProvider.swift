@@ -23,6 +23,17 @@ public struct OpenLibrarySearchProvider: TitleSearchProvider {
         let normalized = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !normalized.isEmpty else { return [] }
 
+        if let cached = await OpenLibrarySearchCache.shared.load(query: normalized) {
+            return cached
+        }
+
+        return try await OpenLibrarySearchCoordinator.shared.search(query: normalized) { [session] normalized in
+            try await performSearch(normalized, session: session)
+        }
+    }
+
+    private func performSearch(_ normalized: String, session: URLSession) async throws -> [Title] {
+
         var components = URLComponents(string: "https://openlibrary.org/search.json")
         components?.queryItems = [
             URLQueryItem(name: "q", value: normalized),
@@ -32,8 +43,9 @@ public struct OpenLibrarySearchProvider: TitleSearchProvider {
 
         guard let url = components?.url else { throw ProviderError.requestFailed }
 
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 20
+        try await OpenLibraryRequestGate.shared.waitForTurn()
+
+        var request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 20)
         request.setValue("ReaderTracker/1.0 (open library integration)", forHTTPHeaderField: "User-Agent")
 
         let data: Data
@@ -42,17 +54,40 @@ public struct OpenLibrarySearchProvider: TitleSearchProvider {
             (data, response) = try await session.data(for: request)
         } catch {
             if error is CancellationError { throw error }
+            if let stale = await OpenLibrarySearchCache.shared.loadIncludingExpired(query: normalized) {
+                return stale
+            }
             throw ProviderError.requestFailed
         }
 
-        guard let http = response as? HTTPURLResponse,
-              (200...299).contains(http.statusCode)
-        else { throw ProviderError.invalidResponse }
+        guard let http = response as? HTTPURLResponse else {
+            throw ProviderError.invalidResponse
+        }
+
+        if http.statusCode == 429 || http.statusCode == 503 {
+            let retryAfterValue = http.value(forHTTPHeaderField: "Retry-After")
+            let retryAfter = retryAfterValue.flatMap(TimeInterval.init)
+                ?? retryAfterValue.flatMap { value -> TimeInterval? in
+                    let formatter = DateFormatter()
+                    formatter.locale = Locale(identifier: "en_US_POSIX")
+                    formatter.dateFormat = "EEE',' dd MMM yyyy HH:mm:ss z"
+                    return formatter.date(from: value)?.timeIntervalSinceNow
+                }
+            await OpenLibraryRequestGate.shared.pause(for: retryAfter ?? 60)
+            if let stale = await OpenLibrarySearchCache.shared.loadIncludingExpired(query: normalized) {
+                return stale
+            }
+            throw ProviderError.requestFailed
+        }
+
+        guard (200...299).contains(http.statusCode) else {
+            throw ProviderError.invalidResponse
+        }
 
         let decoded = try JSONDecoder().decode(OpenLibraryResponse.self, from: data)
         var seen = Set<TitleID>()
 
-        return decoded.docs.compactMap { document -> Title? in
+        let titles = decoded.docs.compactMap { document -> Title? in
             guard let key = document.key,
                   key.hasPrefix("/works/")
             else { return nil }
@@ -87,6 +122,9 @@ public struct OpenLibrarySearchProvider: TitleSearchProvider {
                 cover: cover
             )
         }
+
+        await OpenLibrarySearchCache.shared.save(query: normalized, titles: titles)
+        return titles
     }
 }
 
