@@ -1,5 +1,6 @@
 import Foundation
 
+#if DEBUG
 public extension Library {
     public static var preview: Library {
         let day: TimeInterval = 86_400
@@ -57,3 +58,4 @@ public extension LibraryViewModel {
         LibraryViewModel(store: InMemoryStore())
     }
 }
+#endif
