@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Title: Identifiable, Codable, Equatable, Sendable {
+public struct Title: Identifiable, Codable, Equatable, Hashable, Sendable {
     public let id: TitleID
     public var name: String
     public var author: String

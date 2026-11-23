@@ -7,7 +7,7 @@ struct SearchView: View {
 
     init(vm: LibraryViewModel) {
         self.vm = vm
-        _searchVM = State(initialValue: .local(library: vm))
+        _searchVM = State(initialValue: .remote())
     }
 
     var body: some View {
@@ -19,7 +19,20 @@ struct SearchView: View {
                     }
                 }
 
-                if searchVM.results.isEmpty {
+                if let errorMessage = searchVM.errorMessage {
+                    Section {
+                        MockEmptyState(icon: "exclamationmark.triangle", title: "Search unavailable",
+                                       message: errorMessage)
+                    }
+                } else if searchVM.isSearching {
+                    Section {
+                        HStack {
+                            Spacer()
+                            ProgressView("Searching Open Library…")
+                            Spacer()
+                        }
+                    }
+                } else if searchVM.results.isEmpty {
                     Section {
                         MockEmptyState(icon: "magnifyingglass", title: "No Results",
                                        message: "Try a title or author name.")
@@ -27,7 +40,7 @@ struct SearchView: View {
                 } else {
                     Section(searchVM.query.isEmpty ? "Discover" : "Results") {
                         ForEach(searchVM.results) { title in
-                            NavigationLink(value: title.id) {
+                            NavigationLink(value: title) {
                                 HStack(spacing: 12) {
                                     CoverView(cover: title.cover).frame(width: 50)
                                     VStack(alignment: .leading, spacing: 4) {
@@ -50,10 +63,8 @@ struct SearchView: View {
                 try? await Task.sleep(for: .milliseconds(250))
                 await searchVM.search()
             }
-            .navigationDestination(for: TitleID.self) { id in
-                if let title = vm.title(for: id) {
-                    TitleDetailView(title: title, vm: vm)
-                }
+            .navigationDestination(for: Title.self) { title in
+                TitleDetailView(title: title, vm: vm)
             }
             .sheet(isPresented: $showingCustomEntry) {
                 CustomEntryView(vm: vm)

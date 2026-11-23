@@ -1,3 +1,3 @@
-public enum Format : String, Codable, CaseIterable, Sendable {
+public enum Format : String, Codable, CaseIterable, Hashable, Sendable {
     case print, audio
 }

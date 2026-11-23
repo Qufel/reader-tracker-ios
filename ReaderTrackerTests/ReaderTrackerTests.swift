@@ -9,6 +9,33 @@ import Testing
 import Foundation
 @testable import ReaderTracker
 
+private final class MockOpenLibraryURLProtocol: URLProtocol, @unchecked Sendable {
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+    override func startLoading() {
+        let json = """
+        {"docs":[{
+          "key":"/works/OL893415W",
+          "title":"Dune",
+          "author_name":["Frank Herbert"],
+          "first_publish_year":1965,
+          "number_of_pages_median":533,
+          "cover_i":123,
+          "ratings_average":4.3,
+          "first_sentence":["A beginning is the time for taking the most delicate care."]
+        }]}
+        """
+        let response = HTTPURLResponse(url: request.url!, statusCode: 200,
+                                       httpVersion: nil, headerFields: nil)!
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: Data(json.utf8))
+        client?.urlProtocolDidFinishLoading(self)
+    }
+
+    override func stopLoading() {}
+}
+
 struct ReaderTrackerTests {
 
     @Test func finishingEntryAddsOnlyTheMissingAmount() {
@@ -77,6 +104,28 @@ struct ReaderTrackerTests {
         let stats = StatsCalculator().calculate(library: library, period: .week, now: monday, calendar: calendar)
 
         #expect(stats.pagesRead == 20)
+    }
+
+    @Test func openLibrarySearchMapsDocumentToPrintTitle() async throws {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockOpenLibraryURLProtocol.self]
+        let session = URLSession(configuration: configuration)
+        let provider = OpenLibrarySearchProvider(session: session)
+
+        let titles = try await provider.search(query: "Dune")
+
+        #expect(titles.count == 1)
+        #expect(titles.first?.name == "Dune")
+        #expect(titles.first?.author == "Frank Herbert")
+        #expect(titles.first?.format == .print)
+        #expect(titles.first?.year == 1965)
+        #expect(titles.first?.id.source == .openLibrary)
+        #expect(titles.first?.cover == .url(URL(string: "https://covers.openlibrary.org/b/id/123-L.jpg")!))
+    }
+
+    @Test func openLibrarySearchIgnoresBlankQuery() async throws {
+        let provider = OpenLibrarySearchProvider()
+        #expect(try await provider.search(query: "   ") == [])
     }
 
     @Test func localSearchMatchesNameAndAuthor() async throws {
