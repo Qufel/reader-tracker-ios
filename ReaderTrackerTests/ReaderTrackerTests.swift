@@ -58,6 +58,39 @@ struct ReaderTrackerTests {
         #expect(library.entries.first?.status == .finished)
     }
 
+    @Test func loggingSessionAddsSessionAndStartsEntry() {
+        let store = InMemoryStore()
+        let vm = LibraryViewModel(store: store)
+        let title = Title(
+            id: TitleID(source: .custom, value: "session-test"),
+            name: "Session Test", author: "Author", format: .print,
+            total: 100, cover: .color(hex: "#000000"))
+
+        vm.logSession(title, amount: 25)
+
+        #expect(vm.library.done(for: title.id) == 25)
+        #expect(vm.library.entry(for: title.id)?.status == .inProgress)
+        #expect(vm.library.sessions(for: title.id).count == 1)
+    }
+
+    @Test func deletingCustomEntryRemovesAllRelatedData() {
+        let title = Title(
+            id: TitleID(source: .custom, value: "delete-test"),
+            name: "Delete Test", author: "Author", format: .print,
+            total: 100, cover: .color(hex: "#000000"))
+        let store = InMemoryStore(library: Library(
+            titles: [title],
+            entries: [LibraryEntry(titleID: title.id, status: .inProgress)],
+            sessions: [Session(titleID: title.id, date: .now, amount: 20)]))
+        let vm = LibraryViewModel(store: store)
+
+        vm.deleteCustomEntry(title.id)
+
+        #expect(vm.library.titles.isEmpty)
+        #expect(vm.library.entries.isEmpty)
+        #expect(vm.library.sessions.isEmpty)
+    }
+
     @Test func jsonStoreRoundTripsDates() throws {
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)

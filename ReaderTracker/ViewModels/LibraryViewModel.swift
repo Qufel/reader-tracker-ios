@@ -81,6 +81,27 @@ public final class LibraryViewModel {
         save()
     }
 
+    public func logSession(_ title: Title, amount: Int, date: Date = .now) {
+        guard amount > 0 else { return }
+        let id = title.id
+
+        if !library.titles.contains(where: { $0.id == id }) {
+            library.titles.append(title)
+        }
+        if !library.entries.contains(where: { $0.titleID == id }) {
+            library.entries.append(LibraryEntry(titleID: id, status: .want))
+        }
+        guard let index = library.entries.firstIndex(where: { $0.titleID == id }) else { return }
+
+        library.sessions.append(Session(titleID: id, date: date, amount: amount))
+        if title.total > 0, library.done(for: id) >= title.total {
+            LibraryService().finish(id, in: &library, on: date)
+        } else if library.entries[index].status == .want {
+            library.entries[index].start(on: date)
+        }
+        save()
+    }
+
     public func setStatus(_ id: TitleID, to status: ProgressStatus) {
         guard let index = library.entries.firstIndex(where: { $0.titleID == id }) else { return }
         switch status {

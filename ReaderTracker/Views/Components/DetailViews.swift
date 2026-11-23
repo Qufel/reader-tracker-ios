@@ -4,6 +4,7 @@ import SwiftUI
 struct TitleDetailView: View {
     let title: Title
     let vm: LibraryViewModel
+    @Environment(\.dismiss) private var dismiss
     @State private var detailVM: TitleDetailViewModel
 
     init(title: Title, vm: LibraryViewModel) {
@@ -15,6 +16,8 @@ struct TitleDetailView: View {
     @State private var showingReadingSample = false
     @State private var showingAudioSample = false
     @State private var showingTrailer = false
+    @State private var showingLogSession = false
+    @State private var showingDeleteConfirmation = false
 
     var body: some View {
         ScrollView {
@@ -29,21 +32,39 @@ struct TitleDetailView: View {
                             Label(String(format: "%.1f", rating), systemImage: "star.fill")
                                 .foregroundStyle(.yellow)
                         }
-                        StatusBadge(status: vm.library.entry(for: title.id)?.status ?? .want)
+                        if let status = vm.library.entry(for: title.id)?.status {
+                            StatusBadge(status: status)
+                        }
                     }
                 }
 
                 HStack(spacing: 10) {
                     if vm.library.entry(for: title.id) == nil {
                         Button("Add to Library") { detailVM.addToLibrary() }
+                        Button("Log Session") { showingLogSession = true }
                     } else {
                         Button("Start Reading") { detailVM.startReading() }
                             .disabled(vm.library.entry(for: title.id)?.status == .inProgress)
                         Button("Mark Finished") { detailVM.markFinished() }
                             .disabled(vm.library.entry(for: title.id)?.status == .finished)
+                        Button("Log Session") { showingLogSession = true }
                     }
                 }
                 .buttonStyle(.borderedProminent)
+
+                if title.isCustom {
+                    Button("Delete Custom Entry", role: .destructive) {
+                        showingDeleteConfirmation = true
+                    }
+                    .confirmationDialog("Delete Custom Entry?", isPresented: $showingDeleteConfirmation) {
+                        Button("Delete", role: .destructive) {
+                            vm.deleteCustomEntry(title.id)
+                            dismiss()
+                        }
+                    } message: {
+                        Text("This removes the title and all of its reading sessions.")
+                    }
+                }
 
                 if let summary = title.summary {
                     VStack(alignment: .leading, spacing: 8) {
@@ -93,6 +114,48 @@ struct TitleDetailView: View {
         }
         .sheet(isPresented: $showingTrailer) {
             TrailerView(title: title)
+        }
+        .sheet(isPresented: $showingLogSession) {
+            LogSessionView(title: title, vm: vm)
+        }
+    }
+}
+
+struct LogSessionView: View {
+    let title: Title
+    let vm: LibraryViewModel
+    @Environment(\.dismiss) private var dismiss
+    @State private var date = Date()
+    @State private var amountText = ""
+
+    private var amount: Int? {
+        guard let amount = Int(amountText), amount > 0 else { return nil }
+        return title.format == .audio ? amount * 60 : amount
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                DatePicker("Date", selection: $date, displayedComponents: [.date])
+                TextField(title.format == .print ? "Pages read" : "Minutes listened",
+                          text: $amountText)
+                    .keyboardType(.numberPad)
+            }
+            .navigationTitle("Log Reading Session")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        if let amount {
+                            vm.logSession(title, amount: amount, date: date)
+                            dismiss()
+                        }
+                    }
+                    .disabled(amount == nil)
+                }
+            }
         }
     }
 }

@@ -22,6 +22,13 @@ struct LibraryView: View {
                                         EntryCardView(state: card)
                                     }
                                     .buttonStyle(.plain)
+                                    .swipeActions(edge: .trailing) {
+                                        if card.id.source == .custom {
+                                            Button("Delete", role: .destructive) {
+                                                vm.deleteCustomEntry(card.id)
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -34,6 +41,13 @@ struct LibraryView: View {
                                         EntryCardView(state: card)
                                     }
                                     .buttonStyle(.plain)
+                                    .swipeActions(edge: .trailing) {
+                                        if card.id.source == .custom {
+                                            Button("Delete", role: .destructive) {
+                                                vm.deleteCustomEntry(card.id)
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
