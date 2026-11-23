@@ -55,6 +55,11 @@ struct CoverView: View {
 }
 
 // SwiftUI has no hex init. Small one. UInt32(radix:) is built-in.
+enum AppColors {
+    static let primary = Color(hex: "#0F6B5C")!
+    static let secondary = Color(hex: "#B8741A")!
+}
+
 extension Color {
     init?(hex: String) {
         let s = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#").union(.whitespaces))
@@ -67,8 +72,8 @@ extension Color {
 
 #Preview {
     HStack {
-        CoverView(cover: .color(hex: "#0F6B5B")).frame(width: 56)
-        CoverView(cover: .color(hex: "#B5701A")).frame(width: 100)
+        CoverView(cover: .color(hex: "#0F6B5C")).frame(width: 56)
+        CoverView(cover: .color(hex: "#B8741A")).frame(width: 100)
         CoverView(cover: .url(URL(string: "https://covers.openlibrary.org/b/id/12547191-M.jpg")!))
             .frame(width: 100)
         CoverView(cover: .color(hex: "nonsense")).frame(width: 56)   // gray

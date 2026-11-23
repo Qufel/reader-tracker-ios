@@ -73,6 +73,63 @@ struct ReaderTrackerTests {
         #expect(vm.library.sessions(for: title.id).count == 1)
     }
 
+    @Test func loggingSessionNeverExceedsTitleTotal() {
+        let title = Title(
+            id: TitleID(source: .custom, value: "cap-test"),
+            name: "Cap Test", author: "Author", format: .print,
+            total: 500, cover: .color(hex: "#0F6B5C"))
+        let store = InMemoryStore(library: Library(
+            titles: [title],
+            entries: [LibraryEntry(titleID: title.id, status: .inProgress)],
+            sessions: [Session(titleID: title.id, date: .now, amount: 451)]))
+        let vm = LibraryViewModel(store: store)
+
+        vm.logSession(title, amount: 100)
+
+        #expect(vm.library.done(for: title.id) == 500)
+        #expect(vm.library.sessions(for: title.id).contains { $0.amount == 49 })
+        #expect(vm.library.entry(for: title.id)?.status == .finished)
+    }
+
+    @Test func removingSessionUpdatesProgressAndStatus() {
+        let title = Title(
+            id: TitleID(source: .custom, value: "remove-session"),
+            name: "Remove Session", author: "Author", format: .print,
+            total: 500, cover: .color(hex: "#0F6B5C"))
+        let session = Session(titleID: title.id, date: .now, amount: 49)
+        let store = InMemoryStore(library: Library(
+            titles: [title],
+            entries: [LibraryEntry(titleID: title.id, status: .finished)],
+            sessions: [Session(titleID: title.id, date: .now, amount: 451), session]))
+        let vm = LibraryViewModel(store: store)
+
+        vm.removeSession(session.id, title: title)
+
+        #expect(vm.library.done(for: title.id) == 451)
+        #expect(vm.library.entry(for: title.id)?.status == .inProgress)
+        #expect(vm.library.sessions(for: title.id).count == 1)
+    }
+
+    @Test func recentSearchSelectionMovesToFrontAndLimitsTen() {
+        let store = InMemoryStore()
+        let vm = LibraryViewModel(store: store)
+        let first = Title(
+            id: TitleID(source: .openLibrary, value: "recent-1"),
+            name: "Recent 1", author: "Author", format: .print,
+            total: 100, cover: .color(hex: "#000000"))
+        let second = Title(
+            id: TitleID(source: .openLibrary, value: "recent-2"),
+            name: "Recent 2", author: "Author", format: .print,
+            total: 100, cover: .color(hex: "#000000"))
+
+        vm.recordRecentSearchSelection(first)
+        vm.recordRecentSearchSelection(second)
+        vm.recordRecentSearchSelection(first)
+
+        #expect(vm.library.recentTitles.count == 2)
+        #expect(vm.library.recentTitles.first == first)
+    }
+
     @Test func deletingCustomEntryRemovesAllRelatedData() {
         let title = Title(
             id: TitleID(source: .custom, value: "delete-test"),

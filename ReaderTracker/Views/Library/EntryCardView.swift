@@ -35,7 +35,7 @@ struct EntryCardView: View {
     EntryCardView(state: .init(
         id: .init(source: .openLibrary, value: "OL1W"),
         name: "Dune", subtitle: "Frank Herbert · 1965",
-        format: .print, cover: .color(hex: "#0F6B5B"),
+        format: .print, cover: .color(hex: "#0F6B5C"),
         status: .inProgress, progress: 0.3,
         progressText: "Page 160 of 533"))
     .padding()

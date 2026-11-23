@@ -105,7 +105,7 @@ public struct OpenLibrarySearchProvider: TitleSearchProvider {
             if let coverID = document.coverID {
                 cover = .url(URL(string: "https://covers.openlibrary.org/b/id/\(coverID)-L.jpg")!)
             } else {
-                cover = .color(hex: "#0F6B5B")
+                cover = .color(hex: "#0F6B5C")
             }
 
             let summary = document.firstSentence?.first

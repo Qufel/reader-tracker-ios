@@ -4,9 +4,16 @@ import Observation
 @MainActor
 @Observable
 public final class SearchViewModel {
-    public var query: String = ""
+    public var query: String = "" {
+        didSet {
+            guard oldValue != query else { return }
+            results = []
+            hasSearched = false
+        }
+    }
     public private(set) var results: [Title] = []
     public private(set) var isSearching = false
+    public private(set) var hasSearched = false
     public private(set) var errorMessage: String?
 
     private let provider: any TitleSearchProvider
@@ -19,6 +26,7 @@ public final class SearchViewModel {
     public func search() async {
         let searchQuery = query
         isSearching = true
+        hasSearched = true
         defer { isSearching = false }
         errorMessage = nil
         do {

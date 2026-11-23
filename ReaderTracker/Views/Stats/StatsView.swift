@@ -23,10 +23,10 @@ struct StatsView: View {
                     .pickerStyle(.segmented)
 
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                        MockStatCard(title: "Finished", value: "\(stats.finishedCount)", icon: "checkmark.circle.fill", tint: .green)
-                        MockStatCard(title: "Pages Read", value: "\(stats.pagesRead)", icon: "book.pages.fill", tint: .indigo)
-                        MockStatCard(title: "Audio Minutes", value: "\(stats.audioMinutes)", icon: "headphones", tint: .orange)
-                        MockStatCard(title: "Reading Streak", value: "\(stats.readingStreakDays) days", icon: "flame.fill", tint: .red)
+                        MockStatCard(title: "Finished", value: "\(stats.finishedCount)", icon: "checkmark.circle.fill", tint: AppColors.primary)
+                        MockStatCard(title: "Pages Read", value: "\(stats.pagesRead)", icon: "book.pages.fill", tint: AppColors.primary)
+                        MockStatCard(title: "Audio Minutes", value: "\(stats.audioMinutes)", icon: "headphones", tint: AppColors.secondary)
+                        MockStatCard(title: "Reading Streak", value: "\(stats.readingStreakDays) days", icon: "flame.fill", tint: AppColors.primary)
                     }
 
                     SectionHeader(title: "Reading Activity")
@@ -50,7 +50,7 @@ struct StatsView: View {
                     SectionHeader(title: "Recent Highlights")
                     ForEach(stats.recentHighlights) { title in
                         HStack {
-                            Image(systemName: "trophy.fill").foregroundStyle(.yellow)
+                            Image(systemName: "trophy.fill").foregroundStyle(AppColors.secondary)
                             Text("Finished \(title.name)").font(.subheadline)
                             Spacer()
                         }

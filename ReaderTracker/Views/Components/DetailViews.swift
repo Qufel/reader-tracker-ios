@@ -1,6 +1,58 @@
 import Foundation
 import SwiftUI
 
+private struct DescriptionHeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+struct ExpandableDescription: View {
+    let text: String
+    @State private var isExpanded = false
+    @State private var needsExpansion = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(text)
+                .font(.subheadline)
+                .lineLimit(isExpanded ? nil : 4)
+                .fixedSize(horizontal: false, vertical: true)
+                .animation(.easeInOut(duration: 0.28), value: isExpanded)
+                .background {
+                    Text(text)
+                        .font(.subheadline)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .opacity(0)
+                        .background {
+                            GeometryReader { proxy in
+                                Color.clear.preference(
+                                    key: DescriptionHeightPreferenceKey.self,
+                                    value: proxy.size.height)
+                            }
+                        }
+                }
+
+            if needsExpansion {
+                Button(isExpanded ? "Less" : "More") {
+                    withAnimation(.easeInOut(duration: 0.28)) {
+                        isExpanded.toggle()
+                    }
+                }
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(AppColors.primary)
+                .transition(.opacity)
+            }
+        }
+        .onPreferenceChange(DescriptionHeightPreferenceKey.self) { measuredHeight in
+            let lineHeight = UIFont.preferredFont(forTextStyle: .subheadline).lineHeight
+            needsExpansion = measuredHeight > lineHeight * 4 + 1
+        }
+    }
+}
+
 struct TitleDetailView: View {
     let title: Title
     let vm: LibraryViewModel
@@ -18,7 +70,10 @@ struct TitleDetailView: View {
     @State private var showingTrailer = false
     @State private var showingLogSession = false
     @State private var showingDeleteConfirmation = false
-    @State private var showFullSummary = false
+
+    private var themeColor: Color {
+        title.format == .print ? AppColors.primary : AppColors.secondary
+    }
 
     var body: some View {
         ScrollView {
@@ -51,10 +106,10 @@ struct TitleDetailView: View {
                         }
                         Text(title.format == .print ? "Book" : "Audiobook")
                             .font(.caption.weight(.semibold))
-                            .foregroundStyle(.teal)
+                            .foregroundStyle(themeColor)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)
-                            .background(.teal.opacity(0.12), in: Capsule())
+                            .background(themeColor.opacity(0.12), in: Capsule())
                         Text(title.format == .print ? "\(title.total) Pages" : "\(title.total / 60) Minutes")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -63,14 +118,7 @@ struct TitleDetailView: View {
                 }
 
                 if let summary = title.summary {
-                    Text(summary)
-                        .font(.subheadline)
-                        .lineLimit(showFullSummary ? nil : 3)
-                    Button(showFullSummary ? "Less" : "More") {
-                        showFullSummary.toggle()
-                    }
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.teal)
+                    ExpandableDescription(text: summary)
                 }
 
                 HStack(spacing: 8) {
@@ -79,11 +127,11 @@ struct TitleDetailView: View {
                     }
                         .frame(maxWidth: .infinity)
                         .buttonStyle(.bordered)
-                        .tint(.teal)
+                        .tint(themeColor)
                     Button("Watch Trailer") { showingTrailer = true }
                         .frame(maxWidth: .infinity)
                         .buttonStyle(.bordered)
-                        .tint(.teal)
+                        .tint(themeColor)
                 }
 
                 if let entry = vm.library.entry(for: title.id) {
@@ -97,7 +145,7 @@ struct TitleDetailView: View {
                                 .frame(height: 52)
                                 .font(.headline)
                                 .foregroundStyle(.white)
-                                .background(.teal, in: RoundedRectangle(cornerRadius: 16))
+                                .background(themeColor, in: RoundedRectangle(cornerRadius: 16))
                         }
                     } else if entry.status == .want {
                         Button("Start Reading") { detailVM.startReading() }
@@ -105,7 +153,7 @@ struct TitleDetailView: View {
                             .frame(height: 52)
                             .font(.headline)
                             .foregroundStyle(.white)
-                            .background(.teal, in: RoundedRectangle(cornerRadius: 16))
+                            .background(themeColor, in: RoundedRectangle(cornerRadius: 16))
                     }
 
                     SessionList(title: title, vm: vm)
@@ -120,7 +168,7 @@ struct TitleDetailView: View {
                         .frame(height: 52)
                         .font(.headline)
                         .foregroundStyle(.white)
-                        .background(.teal, in: RoundedRectangle(cornerRadius: 16))
+                        .background(themeColor, in: RoundedRectangle(cornerRadius: 16))
                     NotesEditor(title: title, vm: vm, entry: nil)
                 }
 
@@ -210,7 +258,7 @@ struct ProgressCard: View {
                     .foregroundStyle(.secondary)
             }
             ProgressView(value: progress)
-                .tint(.teal)
+                .tint(title.format == .print ? AppColors.primary : AppColors.secondary)
             let entry = vm.library.entry(for: title.id)
             if let started = entry?.startedAt {
                 let startedText = "Started \(started.formatted(.dateTime.day().month(.abbreviated).year()))"
@@ -253,6 +301,11 @@ struct SessionList: View {
                     .frame(height: 52)
                     .background(.white, in: RoundedRectangle(cornerRadius: 16))
                     .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color(.systemGray4), lineWidth: 0.5))
+                    .swipeActions(edge: .trailing) {
+                        Button("Delete", role: .destructive) {
+                            vm.removeSession(session.id, title: title)
+                        }
+                    }
                 }
             }
         }
@@ -291,7 +344,18 @@ struct LogSessionView: View {
 
     private var amount: Int? {
         guard let amount = Int(amountText), amount > 0 else { return nil }
-        return title.format == .audio ? amount * 60 : amount
+        let total = title.format == .audio ? amount * 60 : amount
+        let capped = min(total, vm.remainingAmount(for: title))
+        return capped > 0 ? capped : nil
+    }
+
+    private var remainingText: String {
+        let remaining = vm.remainingAmount(for: title)
+        if title.format == .print {
+            return "Maximum: \(remaining) pages remaining"
+        }
+        let minutes = remaining / 60
+        return "Maximum: \(minutes) minutes remaining"
     }
 
     var body: some View {
@@ -301,6 +365,9 @@ struct LogSessionView: View {
                 TextField(title.format == .print ? "Pages read" : "Minutes listened",
                           text: $amountText)
                     .keyboardType(.numberPad)
+                Text(remainingText)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
             .navigationTitle("Log Reading Session")
             .toolbar {

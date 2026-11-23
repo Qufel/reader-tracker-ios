@@ -84,6 +84,9 @@ public final class LibraryViewModel {
     public func logSession(_ title: Title, amount: Int, date: Date = .now) {
         guard amount > 0 else { return }
         let id = title.id
+        let remaining = remainingAmount(for: title)
+        guard remaining > 0 else { return }
+        let loggedAmount = min(amount, remaining)
 
         if !library.titles.contains(where: { $0.id == id }) {
             library.titles.append(title)
@@ -93,11 +96,35 @@ public final class LibraryViewModel {
         }
         guard let index = library.entries.firstIndex(where: { $0.titleID == id }) else { return }
 
-        library.sessions.append(Session(titleID: id, date: date, amount: amount))
+        library.sessions.append(Session(titleID: id, date: date, amount: loggedAmount))
         if title.total > 0, library.done(for: id) >= title.total {
             LibraryService().finish(id, in: &library, on: date)
         } else if library.entries[index].status == .want {
             library.entries[index].start(on: date)
+        }
+        save()
+    }
+
+    public func remainingAmount(for title: Title) -> Int {
+        guard title.total > 0 else { return Int.max }
+        return max(title.total - library.done(for: title.id), 0)
+    }
+
+    public func removeSession(_ id: UUID, title: Title) {
+        library.sessions.removeAll { $0.id == id }
+
+        guard let index = library.entries.firstIndex(where: { $0.titleID == title.id }) else {
+            save()
+            return
+        }
+
+        let done = library.done(for: title.id)
+        if done <= 0 {
+            library.entries[index].moveToWant()
+        } else if title.total <= 0 || done < title.total {
+            library.entries[index].start(on: library.entries[index].startedAt ?? Date())
+        } else {
+            library.entries[index].finish(on: library.sessions(for: title.id).map(\.date).max() ?? Date())
         }
         save()
     }
@@ -117,6 +144,15 @@ public final class LibraryViewModel {
             library.entries[index].start(on: Date())
         case .finished:
             LibraryService().finish(id, in: &library, on: Date())
+        }
+        save()
+    }
+
+    public func recordRecentSearchSelection(_ title: Title) {
+        library.recentTitles.removeAll { $0.id == title.id }
+        library.recentTitles.insert(title, at: 0)
+        if library.recentTitles.count > 10 {
+            library.recentTitles = Array(library.recentTitles.prefix(10))
         }
         save()
     }

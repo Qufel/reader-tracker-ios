@@ -33,9 +33,30 @@ struct SearchView: View {
                         }
                     }
                 } else if searchVM.results.isEmpty {
-                    Section {
-                        MockEmptyState(icon: "magnifyingglass", title: "No Results",
-                                       message: "Try a title or author name.")
+                    if searchVM.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        if !vm.library.recentTitles.isEmpty {
+                            Section("Recently Viewed") {
+                                ForEach(vm.library.recentTitles) { title in
+                                    NavigationLink(value: title) {
+                                        HStack(spacing: 12) {
+                                            CoverView(cover: title.cover).frame(width: 50)
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text(title.name).font(.headline)
+                                                Text(title.author).font(.caption).foregroundStyle(.secondary)
+                                                Text(title.format == .print ? "Book" : "Audiobook")
+                                                    .font(.caption2).foregroundStyle(.secondary)
+                                            }
+                                        }
+                                        .padding(.vertical, 4)
+                                    }
+                                }
+                            }
+                        }
+                    } else if searchVM.hasSearched {
+                        Section {
+                            MockEmptyState(icon: "magnifyingglass", title: "No Results",
+                                           message: "Try a title or author name.")
+                        }
                     }
                 } else {
                     Section(searchVM.query.isEmpty ? "Discover" : "Results") {
@@ -65,6 +86,7 @@ struct SearchView: View {
             }
             .navigationDestination(for: Title.self) { title in
                 TitleDetailView(title: title, vm: vm)
+                    .onAppear { vm.recordRecentSearchSelection(title) }
             }
             .sheet(isPresented: $showingCustomEntry) {
                 CustomEntryView(vm: vm)

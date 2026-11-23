@@ -32,7 +32,7 @@ public final class CustomEntryViewModel {
             year: Int(yearText),
             format: format,
             total: total,
-            cover: .color(hex: format == .print ? "#4F46E5" : "#B5701A"))
+            cover: .color(hex: format == .print ? "#0F6B5C" : "#B8741A"))
         library.addCustom(title: title, status: status)
     }
 }

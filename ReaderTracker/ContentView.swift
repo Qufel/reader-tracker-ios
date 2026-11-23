@@ -21,6 +21,7 @@ struct ContentView: View {
                 SettingsView(vm: library)
             }
         }
+        .tint(AppColors.primary)
         .preferredColorScheme(library.library.appearance == .dark ? .dark : (library.library.appearance == .light ? .light : nil))
         .alert(
             "Library Error",

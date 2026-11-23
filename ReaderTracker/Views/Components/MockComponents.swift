@@ -32,9 +32,9 @@ struct StatusBadge: View {
 
     private var statusPresentation: (String, Color) {
         switch status {
-        case .want: return ("Want to read", .orange)
-        case .inProgress: return ("Reading", .blue)
-        case .finished: return ("Finished", .green)
+        case .want: return ("Want to read", AppColors.secondary)
+        case .inProgress: return ("Reading", AppColors.primary)
+        case .finished: return ("Finished", AppColors.primary)
         }
     }
 }
@@ -64,7 +64,7 @@ struct MockStatCard: View {
     let title: String
     let value: String
     let icon: String
-    var tint: Color = .blue
+    var tint: Color = AppColors.primary
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
