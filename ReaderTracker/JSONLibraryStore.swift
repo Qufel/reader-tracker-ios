@@ -20,13 +20,18 @@ public struct JSONLibraryStore: LibraryStore {
             return Library()
         }
         let data = try Data(contentsOf: url)
-        return try JSONDecoder().decode(Library.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode(Library.self, from: data)
     }
 
     public func save(_ library: Library) throws {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         let data = try encoder.encode(library)
+        try FileManager.default.createDirectory(
+            at: url.deletingLastPathComponent(),
+            withIntermediateDirectories: true)
         try data.write(to: url, options: .atomic)  // no half-written file
     }
 }

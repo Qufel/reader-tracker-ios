@@ -1,38 +1,33 @@
-// ReaderTrackerApp/Views/Library/EntryCardView.swift
 import SwiftUI
 
 struct EntryCardView: View {
     let state: EntryCardState
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .top, spacing: 14) {
             CoverView(cover: state.cover)
-                .frame(width: 56, height: 80)
+                .frame(width: 64)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(state.name)
-                    .font(.headline)
-                    .lineLimit(1)
-                Text(state.subtitle)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                HStack(spacing: 6) {
+            VStack(alignment: .leading, spacing: 7) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(state.name).font(.headline).lineLimit(2)
+                        Text(state.subtitle).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                    }
+                    Spacer()
+                    StatusBadge(status: state.status ?? .want)
                 }
 
-                if let progress = state.progress,
-                   let text = state.progressText {
-                    ProgressView(value: progress, )
-                    Text(text)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                if let progress = state.progress, let text = state.progressText {
+                    ProgressView(value: progress)
+                    Text(text).font(.caption).foregroundStyle(.secondary)
                 }
             }
-            Spacer(minLength: 0)
         }
         .padding(12)
         .background(.background, in: RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.06), radius: 3, y: 1)
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(.separator.opacity(0.5), lineWidth: 0.5))
+        .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
     }
 }
 

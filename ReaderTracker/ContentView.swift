@@ -1,8 +1,7 @@
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    let library : LibraryViewModel
+    let library: LibraryViewModel
 
     var body: some View {
         TabView {
@@ -11,17 +10,30 @@ struct ContentView: View {
             }
             
             Tab("Search", systemImage: "magnifyingglass") {
-                SearchView()
+                SearchView(vm: library)
             }
             
             Tab("Stats", systemImage: "chart.bar") {
-                StatsView()
+                StatsView(vm: library)
             }
             
             Tab("Settings", systemImage: "gearshape") {
-                SettingsView()
+                SettingsView(vm: library)
             }
         }
+        .preferredColorScheme(library.library.appearance == .dark ? .dark : (library.library.appearance == .light ? .light : nil))
+        .alert(
+            "Library Error",
+            isPresented: Binding(
+                get: { library.errorMessage != nil },
+                set: { if !$0 { library.dismissError() } }),
+            presenting: library.errorMessage) { _ in
+                Button("OK") {
+                    library.dismissError()
+                }
+            } message: { message in
+                Text(message)
+            }
     }
 
 }
