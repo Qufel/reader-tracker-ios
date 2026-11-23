@@ -102,6 +102,12 @@ public final class LibraryViewModel {
         save()
     }
 
+    public func updateNotes(_ id: TitleID, notes: String) {
+        guard let index = library.entries.firstIndex(where: { $0.titleID == id }) else { return }
+        library.entries[index].notes = notes
+        save()
+    }
+
     public func setStatus(_ id: TitleID, to status: ProgressStatus) {
         guard let index = library.entries.firstIndex(where: { $0.titleID == id }) else { return }
         switch status {

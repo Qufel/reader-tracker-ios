@@ -18,92 +18,129 @@ struct TitleDetailView: View {
     @State private var showingTrailer = false
     @State private var showingLogSession = false
     @State private var showingDeleteConfirmation = false
+    @State private var showFullSummary = false
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 16) {
                 HStack(alignment: .top, spacing: 16) {
-                    CoverView(cover: title.cover).frame(width: 112)
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(title.name).font(.title2.bold())
-                        Text(title.author).foregroundStyle(.secondary)
-                        if let year = title.year { Text(String(year)).foregroundStyle(.secondary) }
+                    CoverView(cover: title.cover)
+                        .frame(width: 112, height: 168)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    VStack(alignment: .leading, spacing: 7) {
+                        Text(title.name)
+                            .font(.title3.bold())
+                            .lineLimit(3)
+                        Text(title.author)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        if let year = title.year {
+                            Text(year.description)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
                         if let rating = title.rating {
-                            Label(String(format: "%.1f", rating), systemImage: "star.fill")
-                                .foregroundStyle(.yellow)
+                            HStack(spacing: 2) {
+                                ForEach(0..<5, id: \.self) { index in
+                                    Image(systemName: Double(index) < rating ? "star.fill" : "star")
+                                        .font(.caption)
+                                        .foregroundStyle(.primary)
+                                }
+                                Text(String(format: " %.1f", rating)).font(.caption)
+                            }
                         }
-                        if let status = vm.library.entry(for: title.id)?.status {
-                            StatusBadge(status: status)
-                        }
+                        Text(title.format == .print ? "Book" : "Audiobook")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.teal)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(.teal.opacity(0.12), in: Capsule())
+                        Text(title.format == .print ? "\(title.total) Pages" : "\(title.total / 60) Minutes")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
-                }
-
-                HStack(spacing: 10) {
-                    if vm.library.entry(for: title.id) == nil {
-                        Button("Add to Library") { detailVM.addToLibrary() }
-                        Button("Log Session") { showingLogSession = true }
-                    } else {
-                        Button("Start Reading") { detailVM.startReading() }
-                            .disabled(vm.library.entry(for: title.id)?.status == .inProgress)
-                        Button("Mark Finished") { detailVM.markFinished() }
-                            .disabled(vm.library.entry(for: title.id)?.status == .finished)
-                        Button("Log Session") { showingLogSession = true }
-                    }
-                }
-                .buttonStyle(.borderedProminent)
-
-                if title.isCustom {
-                    Button("Delete Custom Entry", role: .destructive) {
-                        showingDeleteConfirmation = true
-                    }
-                    .confirmationDialog("Delete Custom Entry?", isPresented: $showingDeleteConfirmation) {
-                        Button("Delete", role: .destructive) {
-                            vm.deleteCustomEntry(title.id)
-                            dismiss()
-                        }
-                    } message: {
-                        Text("This removes the title and all of its reading sessions.")
-                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
                 if let summary = title.summary {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("About").font(.headline)
-                        Text(summary).foregroundStyle(.secondary)
+                    Text(summary)
+                        .font(.subheadline)
+                        .lineLimit(showFullSummary ? nil : 3)
+                    Button(showFullSummary ? "Less" : "More") {
+                        showFullSummary.toggle()
                     }
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.teal)
                 }
 
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Media").font(.headline)
-                    if title.format == .print {
-                        Button { showingReadingSample = true } label: {
-                            Label("Read sample", systemImage: "doc.text")
-                        }
-                    } else {
-                        Button { showingAudioSample = true } label: {
-                            Label("Listen to sample", systemImage: "headphones")
-                        }
-                        Button { showingTrailer = true } label: {
-                            Label("Watch trailer", systemImage: "play.rectangle")
-                        }
+                HStack(spacing: 8) {
+                    Button(title.format == .print ? "Read Sample" : "Listen to Sample") {
+                        if title.format == .print { showingReadingSample = true } else { showingAudioSample = true }
                     }
+                        .frame(maxWidth: .infinity)
+                        .buttonStyle(.bordered)
+                        .tint(.teal)
+                    Button("Watch Trailer") { showingTrailer = true }
+                        .frame(maxWidth: .infinity)
+                        .buttonStyle(.bordered)
+                        .tint(.teal)
                 }
 
                 if let entry = vm.library.entry(for: title.id) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Your Reading").font(.headline)
-                        let done = vm.library.done(for: title.id)
-                        let progress = title.total > 0 ? min(Double(done) / Double(title.total), 1) : 0
-                        ProgressView(value: progress)
-                        Text(title.format == .print
-                             ? "Page \(done) of \(title.total)"
-                             : "\(done / 3600)h \(done % 3600 / 60)m listened")
-                            .font(.subheadline).foregroundStyle(.secondary)
+                    statusSegment(entry.status)
+
+                    if entry.status == .inProgress || entry.status == .finished {
+                        ProgressCard(title: title, vm: vm)
+                        if entry.status == .inProgress {
+                            Button("Log Reading Session") { showingLogSession = true }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 52)
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                                .background(.teal, in: RoundedRectangle(cornerRadius: 16))
+                        }
+                    } else if entry.status == .want {
+                        Button("Start Reading") { detailVM.startReading() }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 52)
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .background(.teal, in: RoundedRectangle(cornerRadius: 16))
                     }
+
+                    SessionList(title: title, vm: vm)
+                    NotesEditor(title: title, vm: vm, entry: entry)
+                } else {
+                    statusSegment(nil)
+                    Button("Start Reading") {
+                        detailVM.addToLibrary()
+                        detailVM.startReading()
+                    }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 52)
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .background(.teal, in: RoundedRectangle(cornerRadius: 16))
+                    NotesEditor(title: title, vm: vm, entry: nil)
+                }
+
+                if title.isCustom {
+                    Button("Delete Custom Entry", role: .destructive) { showingDeleteConfirmation = true }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .confirmationDialog("Delete Custom Entry?", isPresented: $showingDeleteConfirmation) {
+                            Button("Delete", role: .destructive) {
+                                vm.deleteCustomEntry(title.id)
+                                dismiss()
+                            }
+                        } message: {
+                            Text("This removes the title and all of its reading sessions.")
+                        }
                 }
             }
-            .padding()
+            .padding(.horizontal, 32)
+            .padding(.top, 8)
         }
+        .background(Color(.systemGroupedBackground))
         .navigationTitle(title.format == .print ? "Book Details" : "Audiobook Details")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingReadingSample) {
@@ -117,6 +154,130 @@ struct TitleDetailView: View {
         }
         .sheet(isPresented: $showingLogSession) {
             LogSessionView(title: title, vm: vm)
+        }
+    }
+}
+
+extension TitleDetailView {
+    func statusSegment(_ status: ProgressStatus?) -> some View {
+        HStack(spacing: 0) {
+            segment("Want", selected: status == .want) { selectStatus(.want) }
+            segment("Reading", selected: status == .inProgress) { selectStatus(.inProgress) }
+            segment("Finished", selected: status == .finished) { selectStatus(.finished) }
+        }
+        .background(Color(.systemGray5), in: RoundedRectangle(cornerRadius: 14))
+        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color(.systemGray4), lineWidth: 0.5))
+        .frame(height: 48)
+    }
+
+    private func segment(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.primary)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(selected ? .white : .clear, in: RoundedRectangle(cornerRadius: 10))
+                .shadow(color: selected ? .black.opacity(0.08) : .clear, radius: 2, y: 1)
+                .padding(4)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func selectStatus(_ status: ProgressStatus) {
+        if vm.library.entry(for: title.id) == nil {
+            vm.addTitle(title, status: status)
+        } else {
+            vm.setStatus(title.id, to: status)
+        }
+    }
+}
+
+struct ProgressCard: View {
+    let title: Title
+    let vm: LibraryViewModel
+
+    var body: some View {
+        let done = vm.library.done(for: title.id)
+        let progress = title.total > 0 ? min(Double(done) / Double(title.total), 1) : 0
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("\(Int(progress * 100))%").font(.title3.bold())
+                Spacer()
+                Text(title.format == .print
+                     ? "\(done) of \(title.total) pages"
+                     : "\(done / 3600)h \(done % 3600 / 60)m listened")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            ProgressView(value: progress)
+                .tint(.teal)
+            let entry = vm.library.entry(for: title.id)
+            if let started = entry?.startedAt {
+                let startedText = "Started \(started.formatted(.dateTime.day().month(.abbreviated).year()))"
+                if let finished = entry?.finishedAt {
+                    Text("\(startedText) · Finished \(finished.formatted(.dateTime.day().month(.abbreviated).year()))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text(startedText)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding(16)
+        .background(.white, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color(.systemGray4), lineWidth: 0.5))
+    }
+}
+
+struct SessionList: View {
+    let title: Title
+    let vm: LibraryViewModel
+
+    var body: some View {
+        let sessions = vm.library.sessions(for: title.id)
+        if !sessions.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Last Sessions").font(.title3.bold())
+                ForEach(sessions.prefix(5)) { session in
+                    HStack {
+                        Text(session.date.formatted(.dateTime.day().month(.abbreviated).weekday(.wide).year()))
+                            .font(.subheadline.weight(.medium))
+                        Spacer()
+                        Text("+\(title.format == .print ? "\(session.amount) Pages" : "\(session.amount / 60) Minutes")")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, 16)
+                    .frame(height: 52)
+                    .background(.white, in: RoundedRectangle(cornerRadius: 16))
+                    .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color(.systemGray4), lineWidth: 0.5))
+                }
+            }
+        }
+    }
+}
+
+struct NotesEditor: View {
+    let title: Title
+    let vm: LibraryViewModel
+    let entry: LibraryEntry?
+    @State private var notes = ""
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Notes").font(.title3.bold())
+            TextField("Add a thought or quote…", text: $notes, axis: .vertical)
+                .textFieldStyle(.plain)
+                .padding(12)
+                .frame(minHeight: 60, alignment: .top)
+                .background(.white, in: RoundedRectangle(cornerRadius: 16))
+                .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color(.systemGray4), lineWidth: 0.5))
+                .onAppear { notes = entry?.notes ?? "" }
+                .onChange(of: notes) { _, newValue in
+                    vm.updateNotes(title.id, notes: newValue)
+                }
         }
     }
 }
